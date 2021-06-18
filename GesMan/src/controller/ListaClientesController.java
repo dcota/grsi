@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -50,15 +47,20 @@ public class ListaClientesController {
     @FXML
     private Button btnConsultar;
 
+    @FXML
+    private TextField tfPesquisar;
+
     private MySQLConnection connection;
 
     private ObservableList<Cliente> listaClientes;
+    private ObservableList<Cliente> pesquisarClientes;
 
     private Cliente linhaCliente;
 
     public void initialize() throws SQLException {
         //preparar a tabela para receber os clientes da base de dados
         listaClientes = FXCollections.observableArrayList();
+        pesquisarClientes = FXCollections.observableArrayList();
         this.tblClientes.setItems(listaClientes);
         this.colNum.setCellValueFactory(new PropertyValueFactory<Cliente,Integer>("numCliente"));
         this.colNome.setCellValueFactory(new PropertyValueFactory<Cliente,String>("nome"));
@@ -66,6 +68,22 @@ public class ListaClientesController {
         this.colNIF.setCellValueFactory(new PropertyValueFactory<Cliente,Integer>("nif"));
         //chama método para listar os clientes
         preencheTabela();
+    }
+
+    @FXML
+    public void pesquisarNome(){
+        String nomePesquisa = this.tfPesquisar.getText();
+        if(nomePesquisa.isEmpty()){
+            this.tblClientes.setItems(listaClientes);
+        } else {
+            this.pesquisarClientes.clear();
+            for(Cliente c : this.listaClientes) {
+                if(c.getNome().toLowerCase().contains(nomePesquisa.toLowerCase())){
+                    this.pesquisarClientes.add(c);
+                }
+            }
+            this.tblClientes.setItems(pesquisarClientes);
+        }
     }
 
     @FXML
@@ -79,6 +97,8 @@ public class ListaClientesController {
             stage.initModality(Modality.WINDOW_MODAL);
             stage.setScene(scene);
             stage.showAndWait();
+            this.pesquisarClientes.clear();
+            this.tfPesquisar.clear();
             preencheTabela();
         } catch (IOException | SQLException e) {
             e.printStackTrace();

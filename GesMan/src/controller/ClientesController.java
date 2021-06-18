@@ -12,8 +12,11 @@ import model.MySQLConnection;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class ClientesController {
@@ -73,7 +76,6 @@ public class ClientesController {
                 Stage stage = (Stage) this.btnCriar.getScene().getWindow();
                 stage.close();
             }
-
             else alertaERRO("Não foi possível adicionar o cliente...");
         }
         else {
@@ -92,19 +94,23 @@ public class ClientesController {
 
     public void getCliente(int id){
         try{
-        ResultSet result = connection.consultaCliente(id);
-        while(result.next()){
-            this.tfNumCliente.setText(String.valueOf(result.getInt(1)));
-            this.tfNome.setText(result.getString(2));
-            this.tfNIF.setText(String.valueOf(result.getInt(3)));
-            this.tfMorada.setText(result.getString(4));
-            this.tfCPlocalidade.setText(String.valueOf(result.getInt(5)));
-            this.tfCPrua.setText(String.valueOf(result.getInt(6)));
-            Date date = result.getDate(7);
-            LocalDate date1 = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            this.dpDataNasc.setValue(date1);
-            this.taObs.setText(result.getString(8));
-        }
+            ResultSet result = connection.consultaCliente(id);
+            while(result.next()){
+                this.tfNumCliente.setText(String.valueOf(result.getInt(1)));
+                this.tfNome.setText(result.getString(2));
+                this.tfNIF.setText(String.valueOf(result.getInt(3)));
+                this.tfMorada.setText(result.getString(4));
+                this.tfCPlocalidade.setText(String.valueOf(result.getInt(5)));
+                this.tfCPrua.setText(String.valueOf(result.getInt(6)));
+                this.tfCPdescr.setText((result.getString(7)));
+                Date date = result.getDate(8);
+                Format f = new SimpleDateFormat("dd/MM/yyyy");
+                String strDate = f.format(date);
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate ld = LocalDate.parse(strDate,dateTimeFormatter);
+                this.dpDataNasc.setValue(ld);
+                this.taObs.setText(result.getString(9));
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
