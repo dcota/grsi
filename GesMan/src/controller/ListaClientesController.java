@@ -53,14 +53,15 @@ public class ListaClientesController {
     private MySQLConnection connection;
 
     private ObservableList<Cliente> listaClientes;
-    private ObservableList<Cliente> pesquisarClientes;
+    private ObservableList<Cliente> listaPesquisa;
+
 
     private Cliente linhaCliente;
 
     public void initialize() throws SQLException {
         //preparar a tabela para receber os clientes da base de dados
         listaClientes = FXCollections.observableArrayList();
-        pesquisarClientes = FXCollections.observableArrayList();
+        listaPesquisa = FXCollections.observableArrayList();
         this.tblClientes.setItems(listaClientes);
         this.colNum.setCellValueFactory(new PropertyValueFactory<Cliente,Integer>("numCliente"));
         this.colNome.setCellValueFactory(new PropertyValueFactory<Cliente,String>("nome"));
@@ -76,13 +77,20 @@ public class ListaClientesController {
         if(nomePesquisa.isEmpty()){
             this.tblClientes.setItems(listaClientes);
         } else {
-            this.pesquisarClientes.clear();
-            for(Cliente c : this.listaClientes) {
+            this.listaPesquisa.clear();
+            for(Cliente c : this.listaClientes){
                 if(c.getNome().toLowerCase().contains(nomePesquisa.toLowerCase())){
-                    this.pesquisarClientes.add(c);
+                    this.listaPesquisa.add(c);
                 }
             }
-            this.tblClientes.setItems(pesquisarClientes);
+
+            /*for(int i=0; i<this.listaClientes.size();i++){
+                if(this.listaClientes.get(i).getNome().toLowerCase().contains(nomePesquisa.toLowerCase())){
+                    this.listaPesquisa.add(this.listaClientes.get(i));
+                }
+            }*/
+
+            this.tblClientes.setItems(listaPesquisa);
         }
     }
 
@@ -97,8 +105,6 @@ public class ListaClientesController {
             stage.initModality(Modality.WINDOW_MODAL);
             stage.setScene(scene);
             stage.showAndWait();
-            this.pesquisarClientes.clear();
-            this.tfPesquisar.clear();
             preencheTabela();
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -120,9 +126,6 @@ public class ListaClientesController {
                 ClientesController controller = loader.getController();
                 //passar o objeto para a vista cliente
                 controller.getCliente(this.linhaCliente.getNumCliente());
-
-
-
                 Scene scene = new Scene(root);
                 Stage stage = new Stage();
                 stage.initModality(Modality.WINDOW_MODAL);

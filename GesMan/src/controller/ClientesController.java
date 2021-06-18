@@ -94,6 +94,7 @@ public class ClientesController {
 
     public void getCliente(int id){
         try{
+            this.btnCriar.setVisible(false);
             ResultSet result = connection.consultaCliente(id);
             while(result.next()){
                 this.tfNumCliente.setText(String.valueOf(result.getInt(1)));
