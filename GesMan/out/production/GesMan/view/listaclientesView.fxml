@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="431.0" prefWidth="666.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ListaClientesController">
+   <children>
+      <TableView fx:id="tblClientes" layoutX="56.0" layoutY="26.0" prefHeight="325.0" prefWidth="555.0">
+        <columns>
+          <TableColumn fx:id="colNum" prefWidth="69.0" text="Nº Cliente" />
+          <TableColumn fx:id="colNome" prefWidth="176.0" text="Nome" />
+            <TableColumn fx:id="colMorada" prefWidth="183.0" text="Morada" />
+            <TableColumn fx:id="colNIF" prefWidth="126.0" text="NIF" />
+        </columns>
+      </TableView>
+      <Button fx:id="btnInserirCliente" layoutX="74.0" layoutY="372.0" mnemonicParsing="false" onAction="#inserirCliente" prefHeight="25.0" prefWidth="92.0" text="Inserir Cliente" />
+      <Button fx:id="btnAbrirTicket" layoutX="356.0" layoutY="372.0" mnemonicParsing="false" prefWidth="92.0" text="Abrir Ticket" />
+      <Button fx:id="btnCancelar" layoutX="503.0" layoutY="372.0" mnemonicParsing="false" prefWidth="92.0" text="Cancelar" />
+      <Button fx:id="btnConsultar" layoutX="204.0" layoutY="372.0" mnemonicParsing="false" onAction="#consultar" prefWidth="92.0" text="Consultar" />
+   </children>
+</AnchorPane>
